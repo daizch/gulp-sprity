@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+*.log
+*.gz
+logs
+npm-debug.log.*

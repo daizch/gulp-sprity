@@ -1,0 +1,50 @@
+{
+  "name": "gulp-sprity",
+  "version": "0.0.1",
+  "description": "A gulp plugin for generating css sprite",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul test _mocha --report html -- test/*.js --reporter spec"
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/Dijason/gulp-sprity.git"
+  },
+  "keywords": [
+    "gulp",
+    "css",
+    "sprite",
+    "gulp-sprity"
+  ],
+  "author": {
+    "name": "Jason Dai",
+    "email": "daizech@gmail.com",
+    "url": "https://github.com/Dijason"
+  },
+  "license": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Dijason/gulp-sprity/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">=0.10",
+    "npm": ">=1.4.3"
+  },
+  "dependencies": {
+    "fs-extra": "^0.30.0",
+    "gm": "^1.23.0",
+    "gulp-util": "^3.0.7",
+    "lodash": "^4.15.0",
+    "postcss": "^5.1.2",
+    "spritesmith": "^3.1.0",
+    "through2": "^2.0.1"
+  },
+  "devDependencies": {
+    "gulp-clean-css": "^2.0.12",
+    "istanbul": "^0.4.4",
+    "mocha": "^2.5.3",
+    "should": "^10.0.0",
+    "vinyl-fs": "^2.4.3"
+  }
+}

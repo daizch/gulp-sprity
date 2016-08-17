@@ -1,0 +1,12 @@
+.aaa {
+  background: url("./images/AAA.png#sprite") no-repeat;
+  height: 100px;
+  width: 50px;
+  display: inline-block;
+}
+
+.bbb {
+  background: url("./images/BBB.png#sprite");
+  height: 10px;
+  width: 200px;
+}

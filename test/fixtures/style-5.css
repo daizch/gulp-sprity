@@ -1,0 +1,27 @@
+.aaa {
+  background: url("./images/AAA.png?__sprite") no-repeat;
+  height: 100px;
+  width: 50px;
+  display: inline-block;
+}
+
+.bbb {
+  background: url("./images/BBB.png#sprite");
+  height: 10px;
+  width: 200px;
+}
+
+
+.fff {
+  background-image: url("./images/FFF.png#sprite");
+  height: 200px;
+  width: 20px;
+  color: blue;
+}
+
+.fff-jpg {
+  background-image: url("./images/FFF-trans.jpg#sprite");
+  height: 100px;
+  width: 20px;
+  float: left;
+}
