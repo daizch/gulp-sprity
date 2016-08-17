@@ -12,7 +12,7 @@ var PluginError = gutil.PluginError;
 const PLUGIN_NAME = 'gulp-sprity';
 
 
-function getBackgroundImageAndNodeList(root, options) {
+function parse(root, options) {
     var backgroundImageList = [];
 
     var spriteMark = _.isUndefined(options.spriteMark) ? '\\#sprite' : options.spriteMark;
@@ -87,7 +87,7 @@ function createSpriteImage(file, sprites, options, callback) {
     });
 }
 
-function addSpriteImageProp(result, imageAndNodes) {
+function outpuSpriteImageProp(result, imageAndNodes) {
     var backgroundNodeList = imageAndNodes.backgroundNodeList;
     var backgroundImageList = imageAndNodes.backgroundImageList;
 
@@ -125,12 +125,12 @@ module.exports = function (options) {
         var root = postcss.parse(content);
 
         var self = this;
-        var imageAndNodes = getBackgroundImageAndNodeList(root, options);
+        var imageAndNodes = parse(root, options);
         if (imageAndNodes.backgroundImageList.length > 0) {
             var sprites = resolveImages(file, imageAndNodes.backgroundImageList);
             createSpriteImage(file, sprites, options, function (result) {
                 // self.push(imgFile);
-                addSpriteImageProp(result, imageAndNodes);
+                outpuSpriteImageProp(result, imageAndNodes);
                 file.contents = new Buffer(root.toResult().css);
                 self.push(file);
                 return callback();
