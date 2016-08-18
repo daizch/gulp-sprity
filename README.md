@@ -113,28 +113,41 @@ sprity({
 
 ### spriteMark
 Type: `String`
+default `#sprite`
 
-To mark which image should be merged into a spritesheet, default `#sprite`.
+To mark which image should be merged into a spritesheet.
 
 
 ### spritePrefix
 Type: `String`
+default: `undefined`
 
 To add the prefix directory path of spritesheet and save the sprited image to the prefix directory.
 
 
+### spriteFileNameReplacer
+Type: `Function`
+default: `undefined`
+
+Parameters:
+* fileName: the file name of the original css file with no extname.
+
+To change the file name of the sprited image.
+
 ### backgroundUrlHandler
 Type: `Function`
+default `undefined`
 
 Parameters:
 * imgFilePath: origin saved path of spritesheet
 * filePath: the file path of original file
 
-To handle the url of background-image, output what you want to insert into css file, default `undefined`.
+To handle the url of background-image, output what you want to insert into css file.
 
 
 ### spritePathReplacer
 Type: `Function`
+default `undefined`
 
 Parameters:
 * dir: backgroung image url which will be injected into css file
@@ -142,7 +155,7 @@ Parameters:
 * filePath: the file path of original file
 
 
-To replace the path of a spritesheet where you want to save the spritesheet, default `undefined`.
+To replace the path of a spritesheet where you want to save the spritesheet.
 
 
 ## License
