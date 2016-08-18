@@ -1,6 +1,6 @@
 {
   "name": "gulp-sprity",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A gulp plugin for generating css sprite",
   "main": "index.js",
   "scripts": {
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "gulp-clean-css": "^2.0.12",
+    "gulp-if": "^2.0.1",
     "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "should": "^10.0.0",

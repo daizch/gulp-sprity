@@ -19,13 +19,76 @@ Then, add it into your `gulpfile.js`:
 
 ```javascript
 const cleanCSS = require('gulp-clean-css');
-const sprity = require("gulp-sprity");
+const gulpif = require('gulp-if');
+const sprity = require('gulp-sprity');
+const path = require('path');
 
-gulp.src("./src/**/*.css")
+function fileTypeOf(type) {
+    return function (file) {
+        return path.extname(file.path) === '.' + type;
+    };
+}
+
+gulp.src("src/css/foo.css")
     .pipe(sprity())
-    .pipe(cleanCSS())
+    .pipe(gulpif(fileTypeOf('css'),cleanCSS()))
     .pipe(gulp.dest("build"));
 ```
+
+`input`
+
+```css
+/*foo.css*/
+.icon {
+    background-image: url('icon.png#sprite');
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+}
+```
+
+`output`
+
+```css
+/*foo.css*/
+.icon {
+    background-image: url('sprites/foo_sprite.png');
+    background-repeat: no-repeat;
+    background-position: -334px 0
+    width: 100px;
+    height: 100px;
+}
+```
+
+## Parameters
+
+### spriteMark
+Type: `String`
+
+To mark which image should be merged into a spritesheet, default `#sprite`.
+
+
+### backgroundUrlHandler
+Type: `Function`
+
+Parameters:
+* imgFilePath: origin saved path of spritesheet
+* filePath: the file path of original file
+
+To handle the url of background-image, output what you want to insert into css file, default `undefined`.
+
+
+### spritePathReplacer
+Type: `Function`
+
+Parameters:
+* dir: backgroung image url which will be injected into css file
+* imgFilePath: origin saved path of spritesheet
+* filePath: the file path of original file
+
+
+To replace the path of a spritesheet where you want to save the spritesheet, default `undefined`.
+
 
 ## License
 

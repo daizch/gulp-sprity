@@ -7,6 +7,13 @@ const sprity = require('../index');
 const vfs = require('vinyl-fs');
 var through = require('through2');
 const cleanCSS = require('gulp-clean-css');
+const gulpif = require('gulp-if');
+
+function fileTypeOf(type) {
+    return function (file) {
+        return path.extname(file.path) === '.' + type;
+    };
+}
 
 describe('gulp-sprity', function() {
   var log;
@@ -14,7 +21,7 @@ describe('gulp-sprity', function() {
   it('test image sprite', function (done) {
     vfs.src('test/fixtures/style-1.css')
         .pipe(sprity())
-        .pipe(cleanCSS())
+        .pipe(gulpif(fileTypeOf('css'),cleanCSS()))
         .pipe(vfs.dest('./test/output/'))
         .on('end', done);
   });
@@ -47,10 +54,10 @@ describe('gulp-sprity', function() {
         .on('end', done);
   });
 
-  it('test urlHandler', function (done) {
+  it('test backgroundUrlHandler', function (done) {
     vfs.src('test/fixtures/style-5.css')
         .pipe(sprity({
-          urlHandler: function (filepath) {
+            backgroundUrlHandler: function (filepath) {
             return filepath + '?{md5}';
           }
         }))

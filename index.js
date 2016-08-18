@@ -54,11 +54,11 @@ function resolveImages(file, backgroundImageList) {
 function createSpriteImage(file, sprites, options, callback) {
     var fileName = path.basename(file.path, path.extname(file.path));
     var dir = path.dirname(file.path);
-    fileName += '-sprite.png';
-    var filePath = dir + '/images/' + fileName;
+    fileName += '_sprite.png';
+    var imgFilePath = path.join(path.relative(file.cwd, dir), 'sprites', fileName);
 
     if (_.isFunction(options.spritePathReplacer)) {
-        filePath = options.spritePathReplacer(dir, fileName, file.path);
+        imgFilePath = options.spritePathReplacer(imgFilePath, file.path);
     }
 
     Spritesmith.run({src: sprites}, function (err, result) {
@@ -66,22 +66,20 @@ function createSpriteImage(file, sprites, options, callback) {
             throw new Error(err);
         }
 
-        fs.ensureFileSync(filePath);
-        fs.writeFileSync(filePath, result.image);
-        // var imgFile;
-        // var imgFile = new gutil.File({
-        //     // cwd: file.cwd,
-        //     // base: file.base,
-        //     path: filePath,
-        //     contents: new Buffer(fs.readFileSync(filePath))//result.image
-        // });
-        var backgroungImageUrl = filePath;
-        backgroungImageUrl = path.relative(file.path, backgroungImageUrl);
+        var backgroungImageUrl = path.join(file.cwd, imgFilePath);
+        backgroungImageUrl = path.relative(dir, backgroungImageUrl);
 
-        if (_.isFunction(options.urlHandler)) {
-            backgroungImageUrl = options.urlHandler(backgroungImageUrl, filePath);
+        if (_.isFunction(options.backgroundUrlHandler)) {
+            backgroungImageUrl = options.backgroundUrlHandler(backgroungImageUrl, imgFilePath, file.path);
         }
 
+        var imgFile = new gutil.File({
+            path: path.relative(file.base, imgFilePath),
+            contents: result.image
+        });
+
+        result.imgFile = imgFile;
+        result.imgPath = imgFilePath;
         result.backgroungImageUrl = backgroungImageUrl;
         callback(result);
     });
@@ -129,7 +127,8 @@ module.exports = function (options) {
         if (imageAndNodes.backgroundImageList.length > 0) {
             var sprites = resolveImages(file, imageAndNodes.backgroundImageList);
             createSpriteImage(file, sprites, options, function (result) {
-                // self.push(imgFile);
+                self.push(result.imgFile);
+
                 outpuSpriteImageProp(result, imageAndNodes);
                 file.contents = new Buffer(root.toResult().css);
                 self.push(file);
