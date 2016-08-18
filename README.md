@@ -60,12 +60,67 @@ gulp.src("src/css/foo.css")
 }
 ```
 
+**spritePrefix usage:**
+
+```javascript
+const cleanCSS = require('gulp-clean-css');
+const gulpif = require('gulp-if');
+const sprity = require('gulp-sprity');
+const path = require('path');
+
+function fileTypeOf(type) {
+    return function (file) {
+        return path.extname(file.path) === '.' + type;
+    };
+}
+
+gulp.src("src/css/foo.css")
+    .pipe(sprity({
+        spritePrefix: 'demo/css/sprites/'
+    }))
+    .pipe(gulpif(fileTypeOf('css'),cleanCSS()))
+    .pipe(gulp.dest("build"));
+```
+
+**the same as:**
+
+```javascript
+sprity({
+        backgroundUrlHandler: function(backgroungImageUrl, imgFilePath) {
+            return 'demo/css/' + backgroungImageUrl;
+        },
+        spritePathReplacer: function(imgFilePath, backgroungImageUrl) {
+            return 'demo/css/' + backgroungImageUrl;
+        }
+    })
+```
+
+`output like:`
+
+```css
+/*foo.css*/
+.icon {
+    background-image: url('demo/css/sprites/foo_sprite.png'); /*image file will be saved at build/demo/css/sprites/foo_sprite.png*/
+    background-repeat: no-repeat;
+    background-position: -334px 0
+    width: 100px;
+    height: 100px;
+}
+```
+
+
 ## Parameters
 
 ### spriteMark
 Type: `String`
 
 To mark which image should be merged into a spritesheet, default `#sprite`.
+
+
+### spritePrefix
+Type: `String`
+
+To add the prefix directory path of spritesheet and save the sprited image to the prefix directory.
 
 
 ### backgroundUrlHandler

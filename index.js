@@ -52,29 +52,41 @@ function resolveImages(file, backgroundImageList) {
 }
 
 function createSpriteImage(file, sprites, options, callback) {
-    var fileName = path.basename(file.path, path.extname(file.path));
-    var dir = path.dirname(file.path);
-    fileName += '_sprite.png';
-    var imgFilePath = path.join(path.relative(file.cwd, dir), 'sprites', fileName);
-
-    if (_.isFunction(options.spritePathReplacer)) {
-        imgFilePath = options.spritePathReplacer(imgFilePath, file.path);
-    }
-
     Spritesmith.run({src: sprites}, function (err, result) {
         if (err) {
             throw new Error(err);
         }
+        var fileName = path.basename(file.path, path.extname(file.path));
+        var dir = path.dirname(file.path);
+        var imgFilePath;
+        var backgroungImageUrl;
 
-        var backgroungImageUrl = path.join(file.cwd, imgFilePath);
-        backgroungImageUrl = path.relative(dir, backgroungImageUrl);
+        if (_.isFunction(options.spriteFileNameReplacer)) {
+            backgroungImageUrl = options.spriteFileNameReplacer(fileName);
+        } else {
+            fileName += '_sprite.png';
+        }
+
+        if (options.spritePrefix) {
+            backgroungImageUrl = imgFilePath = options.spritePrefix + fileName;
+        } else {
+            imgFilePath = path.join(path.relative(file.cwd, dir), 'sprites', fileName);
+            backgroungImageUrl = path.join(file.cwd, imgFilePath);
+            backgroungImageUrl = path.relative(dir, backgroungImageUrl);
+        }
 
         if (_.isFunction(options.backgroundUrlHandler)) {
             backgroungImageUrl = options.backgroundUrlHandler(backgroungImageUrl, imgFilePath, file.path);
         }
 
+        if (_.isFunction(options.spritePathReplacer)) {
+            imgFilePath = options.spritePathReplacer(imgFilePath, backgroungImageUrl, file.path);
+        } else if (!options.spritePrefix) {
+            imgFilePath = path.relative(file.base, imgFilePath);
+        }
+
         var imgFile = new gutil.File({
-            path: path.relative(file.base, imgFilePath),
+            path: imgFilePath,
             contents: result.image
         });
 
