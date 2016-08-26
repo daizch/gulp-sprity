@@ -1,6 +1,6 @@
 {
   "name": "gulp-sprity",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A gulp plugin for generating css sprite",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "github",
-    "url": "https://github.com/Dijason/gulp-sprity.git"
+    "url": "https://github.com/daizch/gulp-sprity.git"
   },
   "keywords": [
     "gulp",
@@ -17,14 +17,14 @@
     "gulp-sprity"
   ],
   "author": {
-    "name": "Jason Dai",
+    "name": "zechengdai",
     "email": "daizech@gmail.com",
-    "url": "https://github.com/Dijason"
+    "url": "https://github.com/daizch"
   },
   "license": [
     {
       "type": "MIT",
-      "url": "https://github.com/Dijason/gulp-sprity/blob/master/LICENSE"
+      "url": "https://github.com/daizch/gulp-sprity/blob/master/LICENSE"
     }
   ],
   "engines": {

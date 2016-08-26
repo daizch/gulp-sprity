@@ -41,11 +41,59 @@ function parse(root, options) {
     };
 }
 
+function existFile(fp) {
+    var flag;
+    if (path.isAbsolute(fp)) {
+        try {
+            var stat = fs.statSync(fp);
+            flag = stat.isFile();
+        } catch (err) {
+            flag = false;
+        }
+    } else {
+        flag = false;
+    }
+
+    return flag;
+}
+
 function resolveImages(file, backgroundImageList) {
-    var sprites = []
+    var sprites = [];
+
     backgroundImageList.forEach(function (backgroundImage) {
-        backgroundImage.src = path.resolve(path.dirname(file.path), backgroundImage.src);
-        sprites.push(backgroundImage.src);
+        var src = backgroundImage.src;
+        var curDir = path.dirname(file.path);
+        var imgPath = path.join(curDir, src);
+
+        var relativePath = path.relative(curDir, src);
+
+        var targetPath = '';
+
+        relativePath = path.resolve(curDir, relativePath);
+
+        if (existFile(src)) { //absolute path
+            targetPath = src;
+        } else if (existFile(imgPath)) { //relative path
+            targetPath = imgPath;
+        } else if (existFile(relativePath)) { //relative path
+            targetPath = relativePath;
+        } else { //parse with the same part of the path
+            var curDirArr = curDir.split(path.sep); //root
+            var srcArr = src.split(path.sep);
+
+            var inter = _.intersection(curDirArr, srcArr).join(path.sep);
+            var preDir = curDir.split(inter)[0];
+            var postDir = src.split(inter)[1];
+            relativePath = path.join(preDir, inter, postDir)
+            if (existFile(relativePath)) {
+                targetPath = relativePath;
+            }
+        }
+
+        if (targetPath) {
+            backgroundImage.src = targetPath;
+            sprites.push(backgroundImage.src);
+        }
     });
 
     return sprites;
@@ -70,7 +118,7 @@ function createSpriteImage(file, sprites, options, callback) {
         if (options.spritePrefix) {
             backgroungImageUrl = imgFilePath = options.spritePrefix + fileName;
         } else {
-            imgFilePath = path.join(path.relative(file.cwd, dir), 'sprites', fileName);
+            imgFilePath = path.join(dir, 'sprites', fileName);
             backgroungImageUrl = path.join(file.cwd, imgFilePath);
             backgroungImageUrl = path.relative(dir, backgroungImageUrl);
         }
