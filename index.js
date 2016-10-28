@@ -185,14 +185,18 @@ module.exports = function (options) {
         var imageAndNodes = parse(root, options);
         if (imageAndNodes.backgroundImageList.length > 0) {
             var sprites = resolveImages(file, imageAndNodes.backgroundImageList);
-            createSpriteImage(file, sprites, options, function (result) {
-                self.push(result.imgFile);
+            if (sprites.length > 0) {
+                createSpriteImage(file, sprites, options, function (result) {
+                    self.push(result.imgFile);
 
-                outpuSpriteImageProp(result, imageAndNodes);
-                file.contents = new Buffer(root.toResult().css);
-                self.push(file);
-                return callback();
-            });
+                    outpuSpriteImageProp(result, imageAndNodes);
+                    file.contents = new Buffer(root.toResult().css);
+                    self.push(file);
+                    return callback();
+                });
+            } else {
+                callback(null, file);
+            }
         } else {
             callback(null, file);
         }

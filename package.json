@@ -1,6 +1,6 @@
 {
   "name": "gulp-sprity",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A gulp plugin for generating css sprite",
   "main": "index.js",
   "scripts": {
