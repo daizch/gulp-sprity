@@ -163,7 +163,7 @@ function createSpriteImage(file, sprites, options, callback) {
             fileName += '_sprite.png';
         }
 
-        if (options.keepInRoot) {
+        if (options.keepInRoot && imgUnionDir) {
             imgFilePath = path.join(imgUnionDir, 'sprites', fileName);
             backgroungImageUrl = path.relative(imgUnionDir, imgFilePath);
         } else if (options.spritePrefix) {
