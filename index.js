@@ -99,11 +99,59 @@ function resolveImages(file, backgroundImageList) {
     return sprites;
 }
 
+
+function intersectString() {
+    var args = [].slice.call(arguments);
+    if (args.length < 2) {
+        return args[0] || '';
+    }
+    var str1 = args.shift();
+    var str2 = args.shift();
+    var str1Arr = str1.split(path.sep);
+    var str2Arr = str2.split(path.sep);
+    var i;
+    var len = Math.min(str1Arr.length, str2Arr.length);
+
+    for (i = 0; i < len; i ++) {
+        if (str1Arr[i] != str2Arr[i]) {
+            break;
+        }
+    }
+
+    var sameStr = str2Arr.slice(0, i).join(path.sep);
+
+    if (args.length === 0) {
+        return sameStr;
+    } else {
+        args.unshift(sameStr);
+        return intersectString.apply(null, args);
+    }
+}
+
+function getImgsUnionDir(paths) {
+    var imgUnionDir = intersectString.apply(null, paths);
+
+    try {
+        var stat = fs.statSync(imgUnionDir);
+        if (stat.isFile()) {
+            imgUnionDir = path.dirname(imgUnionDir);
+        } else if (!stat.isDirectory()){
+            imgUnionDir = '';
+        }
+    } catch (err) {
+        imgUnionDir = '';
+    }
+
+    return imgUnionDir;
+}
+
 function createSpriteImage(file, sprites, options, callback) {
+
     Spritesmith.run({src: sprites}, function (err, result) {
         if (err) {
             throw new Error(err);
         }
+        var imgUnionDir = getImgsUnionDir(Object.keys(result.coordinates));
         var fileName = path.basename(file.path, path.extname(file.path));
         var dir = path.dirname(file.path);
         var imgFilePath;
@@ -115,7 +163,10 @@ function createSpriteImage(file, sprites, options, callback) {
             fileName += '_sprite.png';
         }
 
-        if (options.spritePrefix) {
+        if (options.keepInRoot) {
+            imgFilePath = path.join(imgUnionDir, 'sprites', fileName);
+            backgroungImageUrl = path.relative(imgUnionDir, imgFilePath);
+        } else if (options.spritePrefix) {
             backgroungImageUrl = imgFilePath = options.spritePrefix + fileName;
         } else {
             imgFilePath = path.join(dir, 'sprites', fileName);
