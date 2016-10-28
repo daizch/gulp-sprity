@@ -115,7 +115,7 @@ sprity({
 Type: `bool`
 default `undefined`
 
-To mark whether put the image files into the same directory of image file path. For example, one file path is /Users/demo/src/images/dir1/img1.png. Another one is /Users/demo/src/images/dir2/img2.png. Then the spriter will save in /Users/demo/src/images.
+To mark whether put the image files into the same directory of image file path. For example, one file path is /Users/demo/src/images/dir1/img1.png. Another one is /Users/demo/src/images/dir2/img2.png. Then the spriter will be saved in /Users/demo/src/images.
 
 ### spriteMark
 Type: `String`
