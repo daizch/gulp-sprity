@@ -60,6 +60,40 @@ gulp.src("src/css/foo.css")
 }
 ```
 
+** imagePixelRatio **
+```javascript
+gulp.src("src/css/foo.css")
+    .pipe(sprity({imagePixelRatio:2}))
+    .pipe(gulpif(fileTypeOf('css'),cleanCSS()))
+    .pipe(gulp.dest("build"));
+```
+
+`input`
+
+```css
+/*foo.css*/
+.icon {
+    background-image: url('icon.png#sprite');
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+}
+```
+
+`output`
+
+```css
+/*foo.css*/
+.icon {
+    background-image: url('sprites/foo_sprite.png');
+    background-repeat: no-repeat;
+    background-position: -300px 40px; //ps: original position is -600px and 80px
+    background-size: 400px 300px;  //ps: original size is 800px and 600px
+    width: 100px;
+    height: 100px;
+}
+```
+
 **spritePrefix usage:**
 
 ```javascript
@@ -131,6 +165,13 @@ default: `undefined`
 To add the prefix directory path of spritesheet and save the sprited image to the prefix directory.
 
 
+### imagePixelRatio
+Type: Integer
+default `undefined`
+
+To scale the background-size and background-position of the spriter for HD images. 
+
+
 ### spriteFileNameReplacer
 Type: `Function`
 default: `undefined`
@@ -149,7 +190,6 @@ Parameters:
 * filePath: the file path of original file
 
 To handle the url of background-image, output what you want to insert into css file.
-
 
 ### spritePathReplacer
 Type: `Function`

@@ -18,6 +18,16 @@ function fileTypeOf(type) {
 describe('gulp-sprity', function() {
   var log;
 
+    it('test imagePixelRatio', function (done) {
+        vfs.src('test/fixtures/img-pixel-ratio.css')  //compare to style-1.css
+            .pipe(sprity({
+                imagePixelRatio: 2
+            }))
+            .pipe(gulpif(fileTypeOf('css'),cleanCSS()))
+            .pipe(vfs.dest('./test/output/'))
+            .on('end', done);
+    });
+
   it('test image sprite', function (done) {
     vfs.src('test/fixtures/style-1.css')
         .pipe(sprity())

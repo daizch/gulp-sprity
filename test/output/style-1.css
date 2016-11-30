@@ -1,1 +1,12 @@
-.aaa{background:url(../../Users/zechengdai/workplace/github/gulp-sprity/test/fixtures/sprites/style-1_sprite.png) no-repeat;height:100px;width:50px;display:inline-block}.bbb{background:url(../../Users/zechengdai/workplace/github/gulp-sprity/test/fixtures/sprites/style-1_sprite.png) -244px 0;height:10px;width:200px}
+.aaa {
+    background: url(sprites/style-1_sprite.png) no-repeat;
+    height: 100px;
+    width: 50px;
+    display: inline-block
+}
+
+.bbb {
+    background: url(sprites/style-1_sprite.png) -244px 0;
+    height: 10px;
+    width: 200px
+}

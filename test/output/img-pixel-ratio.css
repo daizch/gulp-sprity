@@ -1,0 +1,14 @@
+.aaa {
+    background: url(sprites/img-pixel-ratio_sprite.png) no-repeat;
+    height: 100px;
+    width: 50px;
+    display: inline-block;
+    background-size: 122px 62px
+}
+
+.bbb {
+    background: url(sprites/img-pixel-ratio_sprite.png) -122px 0;
+    height: 10px;
+    width: 200px;
+    background-size: 118px 61px
+}

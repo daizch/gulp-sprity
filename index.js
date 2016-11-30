@@ -11,7 +11,6 @@ var PluginError = gutil.PluginError;
 
 const PLUGIN_NAME = 'gulp-sprity';
 
-
 function parse(root, options) {
     var backgroundImageList = [];
 
@@ -112,7 +111,7 @@ function intersectString() {
     var i;
     var len = Math.min(str1Arr.length, str2Arr.length);
 
-    for (i = 0; i < len; i ++) {
+    for (i = 0; i < len; i++) {
         if (str1Arr[i] != str2Arr[i]) {
             break;
         }
@@ -135,7 +134,7 @@ function getImgsUnionDir(paths) {
         var stat = fs.statSync(imgUnionDir);
         if (stat.isFile()) {
             imgUnionDir = path.dirname(imgUnionDir);
-        } else if (!stat.isDirectory()){
+        } else if (!stat.isDirectory()) {
             imgUnionDir = '';
         }
     } catch (err) {
@@ -195,13 +194,25 @@ function createSpriteImage(file, sprites, options, callback) {
     });
 }
 
-function outpuSpriteImageProp(result, imageAndNodes) {
+function outpuSpriteImageProp(result, imageAndNodes, options) {
     var backgroundNodeList = imageAndNodes.backgroundNodeList;
     var backgroundImageList = imageAndNodes.backgroundImageList;
 
     var coordinates = result.coordinates;
+    var imagePixelRatio = options.imagePixelRatio;
     _.each(backgroundNodeList, function (backgroundNode, i) {
         var offset = coordinates[backgroundImageList[i].src];
+
+        //to fit the mobile device pixel ratio for retina image
+        if (imagePixelRatio) {
+            backgroundNode.append({
+                prop: 'background-size',
+                value: [parseInt(offset.width / imagePixelRatio) + 'px', parseInt(offset.height / imagePixelRatio) + 'px'].join(' ')
+            });
+
+            offset.x = parseInt(offset.x / imagePixelRatio);
+            offset.y = parseInt(offset.y / imagePixelRatio);
+        }
 
         backgroundNode.append({
             prop: 'background-image',
@@ -240,7 +251,7 @@ module.exports = function (options) {
                 createSpriteImage(file, sprites, options, function (result) {
                     self.push(result.imgFile);
 
-                    outpuSpriteImageProp(result, imageAndNodes);
+                    outpuSpriteImageProp(result, imageAndNodes, options);
                     file.contents = new Buffer(root.toResult().css);
                     self.push(file);
                     return callback();
